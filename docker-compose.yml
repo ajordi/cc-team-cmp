@@ -1,0 +1,27 @@
+version: '3.5'
+
+networks:
+    net-test-18-08-09:
+        driver: bridge
+
+volumes:
+  vol-mysql-test-18-08-09:
+    driver: local
+
+services:
+  php:
+      build:
+        context: .
+        dockerfile: docker/php/Dockerfile
+      volumes:
+        - ./src:/opt/app
+        - ./feed-exports:/opt/feed-exports
+        - ./docker/php/entrypoint.sh:/entrypoint.sh
+      networks:
+        - net-test-18-08-09
+      environment:
+        - XDEBUG_REMOTE_HOST=${XDEBUG_REMOTE_HOST}
+        - APP_ENV=${APP_ENV}
+        - APP_SECRET=${APP_SECRET}
+      entrypoint:
+        - /entrypoint.sh
